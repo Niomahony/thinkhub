@@ -42,12 +42,13 @@ export const projectRouter = createTRPCRouter({
         name: projects.name,
         description: projects.description,
         createdBy: projects.createdBy,
+        createdAt: projects.createdAt,
       })
       .from(projectMembers)
       .innerJoin(projects, eq(projectMembers.projectId, projects.id))
       .where(eq(projectMembers.userId, userId));
 
-    const uniqueProjectsMap = new Map();
+    const uniqueProjectsMap = new Map<number, typeof projects.$inferSelect>();
 
     [...createdProjects, ...memberProjects].forEach((project) => {
       uniqueProjectsMap.set(project.id, project);

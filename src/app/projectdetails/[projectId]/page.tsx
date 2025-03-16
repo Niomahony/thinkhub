@@ -9,9 +9,11 @@ import { useSession } from "next-auth/react";
 import { ProjectDetailsPDF } from "~/app/_components/ProjectDetailsPDF";
 
 if (typeof window !== "undefined" && !window.crypto.subtle.digest) {
-  window.crypto.subtle.digest = async (algorithm, data) => {
+  window.crypto.subtle.digest = async (algorithm) => {
     if (algorithm === "SHA-224") {
-      console.warn("SHA-224 polyfill is being used. This is a placeholder implementation.");
+      console.warn(
+        "SHA-224 polyfill is being used. This is a placeholder implementation.",
+      );
       return new Uint8Array(28).buffer;
     }
     throw new Error("Unsupported algorithm");
@@ -242,7 +244,7 @@ const ProjectDetailsPage: React.FC = () => {
     addMemberMutation.mutate(
       {
         projectId: projectId!,
-        email: preciseUser.email, 
+        email: preciseUser.email,
         role: newMemberRole,
       },
       {
