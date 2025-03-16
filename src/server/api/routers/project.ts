@@ -29,10 +29,27 @@ export const projectRouter = createTRPCRouter({
     }),
 
   getProjects: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
+    const userId = ctx.session.user.id;
+
+    const createdProjects = await ctx.db
       .select()
       .from(projects)
-      .where(eq(projects.createdBy, ctx.session.user.id));
+      .where(eq(projects.createdBy, userId));
+
+    const memberProjects = await ctx.db
+      .select({
+        id: projects.id,
+        name: projects.name,
+        description: projects.description,
+        createdBy: projects.createdBy,
+      })
+      .from(projectMembers)
+      .innerJoin(projects, eq(projectMembers.projectId, projects.id))
+      .where(eq(projectMembers.userId, userId));
+
+    const allProjects = [...createdProjects, ...memberProjects];
+
+    return allProjects;
   }),
 
   searchUsersByEmail: protectedProcedure

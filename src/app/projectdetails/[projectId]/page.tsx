@@ -8,7 +8,6 @@ import type { DropResult } from "react-beautiful-dnd";
 import { useSession } from "next-auth/react";
 import { ProjectDetailsPDF } from "~/app/_components/ProjectDetailsPDF";
 
-
 if (typeof window !== "undefined" && !window.crypto.subtle.digest) {
   window.crypto.subtle.digest = async (algorithm, data) => {
     if (algorithm === "SHA-224") {
@@ -18,7 +17,6 @@ if (typeof window !== "undefined" && !window.crypto.subtle.digest) {
     throw new Error("Unsupported algorithm");
   };
 }
-
 
 interface Task {
   id: number;
