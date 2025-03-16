@@ -47,9 +47,13 @@ export const projectRouter = createTRPCRouter({
       .innerJoin(projects, eq(projectMembers.projectId, projects.id))
       .where(eq(projectMembers.userId, userId));
 
-    const allProjects = [...createdProjects, ...memberProjects];
+    const uniqueProjectsMap = new Map();
 
-    return allProjects;
+    [...createdProjects, ...memberProjects].forEach((project) => {
+      uniqueProjectsMap.set(project.id, project);
+    });
+
+    return Array.from(uniqueProjectsMap.values());
   }),
 
   searchUsersByEmail: protectedProcedure
