@@ -8,6 +8,18 @@ import type { DropResult } from "react-beautiful-dnd";
 import { useSession } from "next-auth/react";
 import { ProjectDetailsPDF } from "~/app/_components/ProjectDetailsPDF";
 
+
+if (typeof window !== "undefined" && !window.crypto.subtle.digest) {
+  window.crypto.subtle.digest = async (algorithm, data) => {
+    if (algorithm === "SHA-224") {
+      console.warn("SHA-224 polyfill is being used. This is a placeholder implementation.");
+      return new Uint8Array(28).buffer;
+    }
+    throw new Error("Unsupported algorithm");
+  };
+}
+
+
 interface Task {
   id: number;
   title: string;
